@@ -28,19 +28,25 @@ class MainActivity : AppCompatActivity() {
     private fun getResult() {
         val countries = findViewById<EditText>(R.id.country)
         val name = countries.text.toString()
+        val time = findViewById<TextView>(R.id.time)
         val url = "https://api.weatherapi.com/v1/current.json?" +
                 "key=$API_KEY&q=$name&aqi=no"
         val queue = Volley.newRequestQueue(this)
         val stringRequest = StringRequest(Request.Method.GET,
-
             url,
             { response ->
                 val obj = JSONObject(response)
                 val temp = obj.getJSONObject("current")
                 val tempC = temp.getString("temp_c")
+                val timeC = temp.getString("last_updated")
                 val result = findViewById<TextView>(R.id.result)
                 result.text = "Погода в $name: $tempC"
                 Log.d("VB", "response: ${temp.getString("temp_c")}")
+
+                time.text = "Последнее обновление в: $timeC"
+                Log.d("VB", "response: ${temp.getString("last_updated")}")
+
+
             },
             {
                 Log.d("VB", "ERROR: $it")
